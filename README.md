@@ -25,7 +25,7 @@ A Chrome extension that uses Cohere AI to generate concise summaries of web page
 
 ## Project Structure
 ```
-web-summarize-extension/
+web-summary/
 ├── src/
 │   ├── components/         # React components
 │   │   └── SummaryList.tsx
