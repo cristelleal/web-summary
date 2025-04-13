@@ -66,5 +66,11 @@ web-summarize-extension/
 ![Photo 2](/img/web-summary-pic2.png)
 ![Photo 3](/img/web-summary-pic3.png)
 
+<div align="center">
+  <img src="/img/web-summary-pic.png" width="30%" style="margin-right:10px">
+  <img src="/img/web-summary-pic2.png" width="30%" style="margin-right:10px">
+  <img src="/img/web-summary-pic3.png" width="30%">
+</div>
+
 Thank you 
 
