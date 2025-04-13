@@ -55,10 +55,12 @@ web-summary/
    ```bash
    npm install
    ```
+Add environment variables (See the .env-example file)
 3. Start development server:
    ```bash
    npm run dev
    ```
+
 
 ## Extension pics
 
