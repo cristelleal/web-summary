@@ -11,37 +11,23 @@ const cohere = new CohereClient({
 });
 
 export async function generateSummary(text: string): Promise<string> {
-  const chunkSize = 10000;
-  const chunks = [];
+  const truncatedText = text.slice(0, 10000); // ~3500 tokens
 
-  for (let i = 0; i < text.length; i += chunkSize) {
-    chunks.push(text.slice(i, i + chunkSize));
-  }
+  const prompt = `Tu es un assistant intelligent. Résume en français le texte suivant, de façon claire, concise et structurée. Garde les idées principales et ignore les détails inutiles.\n\nTexte à résumer en français :\n${truncatedText}\n\nRésumé :`;
 
-  const partialSummaries = [];
-
-  for (const chunk of chunks) {
+  try {
     const response = await cohere.generate({
-      prompt: `Tu es un assistant intelligent. Résume de manière claire, concise et en français le contenu suivant extrait d'une page web. Garde le sens original et les idées clés.\n\nTexte à résumer :\n${chunk}\n\nRésumé en français :`,
-      maxTokens: 350,
+      prompt,
+      maxTokens: 400,
       temperature: 0.3,
       stopSequences: ["--"],
     });
 
-    const summary = response.generations?.[0]?.text.trim();
-    if (summary) partialSummaries.push(summary);
+    return response.generations?.[0]?.text.trim() ?? "Résumé non disponible";
+  } catch (err) {
+    console.error("Error", err);
+    return "Erreur lors de la génération du résumé.";
   }
-
-  const finalResponse = await cohere.generate({
-    prompt: `Voici plusieurs résumés partiels d'une page web. Fais une synthèse globale en français, claire et concise, en gardant uniquement les points clés.\n\n${partialSummaries.join(
-      "\n\n"
-    )}\n\nRésumé final :`,
-    maxTokens: 400,
-    temperature: 0.3,
-    stopSequences: ["--"],
-  });
-
-  return finalResponse.generations?.[0]?.text.trim() ?? "Résumé non disponible";
 }
 
 export async function getCurrentPageContent(): Promise<{

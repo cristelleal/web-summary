@@ -3,7 +3,7 @@
   "name": "Web Summary",
   "author": "Cristelle A.",
   "version": "1.0.0",
-  "description": "Generate and save summaries of web pages using Cohere AI",
+  "description": "Une extension Chrome pour résumer le contenu des pages web, en utilisant Cohere AI.",
   "permissions": [
     "activeTab",
     "storage",

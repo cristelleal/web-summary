@@ -56,33 +56,6 @@ web-summarize-extension/
    npm run dev
    ```
 
-## Features in Detail
 
-### Summarization
-- Uses Cohere AI's summarization API
-- Automatically extracts main content from web pages
-- Removes noise (scripts, styles, navigation, etc.)
-- Configurable summary length and style
 
-### Storage
-- Real-time synchronization with Supabase
-- Row Level Security (RLS) enabled
-- User-specific data isolation
-- Automatic conflict resolution
-
-### User Interface
-- Clean, modern design with Tailwind CSS
-- Responsive popup window (400x400 pixels)
-- Loading states and error handling
-- Smooth animations and transitions
-
-## Security
-- Uses Chrome's `activeTab` permission for minimal access
-- Secure API key handling
-- Data isolation through RLS policies
-- No sensitive data stored locally
-
-## License
-MIT License - feel free to use this project for any purpose.
-
-Thank you# web-summary
+Thank you 
