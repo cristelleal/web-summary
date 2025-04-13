@@ -11,7 +11,7 @@ const cohere = new CohereClient({
 });
 
 export async function generateSummary(text: string): Promise<string> {
-  const truncatedText = text.slice(0, 10000); // ~3500 tokens
+  const truncatedText = text.slice(0, 10000);
 
   const prompt = `Tu es un assistant intelligent. Résume en français le texte suivant, de façon claire, concise et structurée. Garde les idées principales et ignore les détails inutiles.\n\nTexte à résumer en français :\n${truncatedText}\n\nRésumé :`;
 

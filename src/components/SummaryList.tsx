@@ -26,7 +26,7 @@ export function SummaryList({ summaries, onDelete }: SummaryListProps) {
           <FileText className="text-gray-400" size={24} />
         </div>
         <p className="text-gray-500 font-medium mb-1">Aucun résumé</p>
-        <p className="text-gray-400 text-sm">
+        <p className="mt-2 text-gray-400 text-sm">
           Cliquez sur "Résumer cette page" pour créer votre premier résumé
         </p>
       </div>
