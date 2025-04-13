@@ -2,7 +2,7 @@
 
 ## Demo
 
-[Video - Web summary](https://www.youtube.com/watch?v=ID_DE_LA_VIDEO)
+[Video - Web summary](https://www.youtube.com/watch?v=xqwuw2xU1Yo)
 
 ## Overview
 A Chrome extension that uses Cohere AI to generate concise summaries of web pages and stores them in a Supabase database. Users can view their summary history and manage their saved summaries.
