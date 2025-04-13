@@ -228,25 +228,25 @@ function App() {
             </div>
           )}
 
-            <button
-              onClick={handleSummarize}
-              disabled={summarizing || !currentUrl}
-              className="generate-button"
-              aria-label="Résumer cette page"
-            >
-              <div className="generate-button-inner">
-                {summarizing ? (
-                  <>
-                    <div className="loader-spin" aria-hidden="true"></div>
-                    <span>Génération en cours...</span>
-                  </>
-                ) : (
-                  "Résumer cette page"
-                )}
-              </div>
-              <div className="shine-effect"></div>
-              <div className="inner-light"></div>
-            </button>
+          <button
+            onClick={handleSummarize}
+            disabled={summarizing || !currentUrl}
+            className="generate-button"
+            aria-label="Résumer cette page"
+          >
+            <div className="generate-button-inner">
+              {summarizing ? (
+                <>
+                  <div className="loader-spin" aria-hidden="true"></div>
+                  <span>Génération en cours...</span>
+                </>
+              ) : (
+                "Résumer cette page"
+              )}
+            </div>
+            <div className="shine-effect"></div>
+            <div className="inner-light"></div>
+          </button>
 
           {recentSummaryText && (
             <div className="mb-4 relative bg-[#FB8500]/5 rounded-lg border border-[#FB8500]/10 p-3">
