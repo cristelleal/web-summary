@@ -15,6 +15,7 @@ import {
   type Summary,
 } from "./lib/supabase";
 import { generateSummary, getCurrentPageContent } from "./lib/cohere";
+import icon from "/icons/icon16.png";
 
 function App() {
   const [summaries, setSummaries] = useState<Summary[]>([]);
@@ -195,11 +196,7 @@ function App() {
             <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#FB8500] to-[#FFB703] shadow-md"></div>
             <div className="absolute inset-0.5 rounded-lg bg-white opacity-10"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <img
-                src="/icon18.png"
-                alt="Logo"
-                className="w-8 h-8 rounded-full"
-              />
+              <img src={icon} alt="Logo" className="w-8 h-8 rounded-full" />
             </div>
             <div className="absolute top-1 left-1 w-2 h-2 rounded-full bg-white opacity-30"></div>
           </div>
@@ -231,29 +228,25 @@ function App() {
             </div>
           )}
 
-          <button
-            onClick={handleSummarize}
-            disabled={summarizing || !currentUrl}
-            className={`group relative w-full py-3.5 px-4 rounded-xl font-medium text-base transition-all mb-6 overflow-hidden ${
-              summarizing || !currentUrl
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-[#FB8500] to-[#F77F00] text-white shadow-md hover:shadow-lg active:shadow-sm active:translate-y-0.5"
-            }`}
-          >
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-10 -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
-
-            {summarizing ? (
-              <span className="flex items-center justify-center">
-                <div className="relative w-5 h-5 mr-2">
-                  <div className="absolute inset-0 rounded-full border-2 border-white border-opacity-20"></div>
-                  <div className="absolute top-0 right-0 bottom-0 left-0 rounded-full border-t-2 border-r-2 border-white animate-spin"></div>
-                </div>
-                Génération en cours...
-              </span>
-            ) : (
-              "Résumer cette page"
-            )}
-          </button>
+            <button
+              onClick={handleSummarize}
+              disabled={summarizing || !currentUrl}
+              className="generate-button"
+              aria-label="Résumer cette page"
+            >
+              <div className="generate-button-inner">
+                {summarizing ? (
+                  <>
+                    <div className="loader-spin" aria-hidden="true"></div>
+                    <span>Génération en cours...</span>
+                  </>
+                ) : (
+                  "Résumer cette page"
+                )}
+              </div>
+              <div className="shine-effect"></div>
+              <div className="inner-light"></div>
+            </button>
 
           {recentSummaryText && (
             <div className="mb-4 relative bg-[#FB8500]/5 rounded-lg border border-[#FB8500]/10 p-3">

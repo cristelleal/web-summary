@@ -1,3 +1,194 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.generate-button {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  margin-bottom: 24px;
+  transform: translateZ(0);
+}
+
+.generate-button-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+  z-index: 2;
+  background-color: transparent;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.generate-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: linear-gradient(110deg, #fb8500, #f77f00, #ffb703, #fb8500);
+  background-size: 200% 200%;
+  border-radius: 16px;
+  animation: gradientShift 4s ease infinite;
+}
+
+.generate-button::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: 0;
+  background: inherit;
+  border-radius: 18px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  filter: blur(12px);
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.shine-effect {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.05) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg) translate(-100%, -100%);
+  animation: shine-animation-idle 5s infinite linear;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+@keyframes shine-animation-idle {
+  0% {
+    transform: rotate(25deg) translate(-100%, -100%);
+  }
+  100% {
+    transform: rotate(25deg) translate(100%, 100%);
+  }
+}
+
+@keyframes shine-animation-hover {
+  0% {
+    transform: rotate(25deg) translate(-100%, -100%);
+  }
+  100% {
+    transform: rotate(25deg) translate(100%, 100%);
+  }
+}
+
+.generate-button:hover .generate-button-inner {
+  transform: scale(1.02);
+}
+
+.generate-button:hover::after {
+  opacity: 0.5;
+}
+
+.generate-button:hover .shine-effect {
+  animation: shine-animation-hover 1.5s forwards cubic-bezier(0.2, 0, 0.3, 1);
+}
+
+.generate-button:active .generate-button-inner {
+  transform: scale(0.98);
+}
+
+.generate-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.generate-button:disabled::before {
+  animation: none;
+  background: linear-gradient(110deg, #aaaaaa, #bbbbbb);
+}
+
+.generate-button:disabled .generate-button-inner {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.generate-button:disabled .shine-effect {
+  display: none;
+}
+
+.loader-spin {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button-container {
+  position: relative;
+  width: 100%;
+  padding: 2px;
+  border-radius: 18px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.5),
+    rgba(0, 0, 0, 0.05)
+  );
+  box-shadow: 0 10px 15px -3px rgba(251, 133, 0, 0.1),
+    0 4px 6px -2px rgba(251, 133, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.inner-light {
+  position: absolute;
+  width: 40%;
+  height: 20%;
+  top: 5%;
+  left: 10%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.6;
+}
