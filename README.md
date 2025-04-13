@@ -55,8 +55,8 @@ web-summary/
    ```bash
    npm install
    ```
-Add environment variables (See the .env-example file)
-3. Start development server:
+3. Add environment variables (See the .env-example file)
+4. Start development server:
    ```bash
    npm run dev
    ```
