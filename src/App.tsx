@@ -204,7 +204,7 @@ function App() {
             <h1 className="text-xl font-semibold text-gray-900 tracking-tight">
               Web Summary
             </h1>
-            <p className="text-xs text-gray-400 -mt-0.5">Powered with Cohere</p>
+            <p className="text-xs text-gray-400 -mt-0.5">Propulsé par Cohere</p>
           </div>
         </div>
         <button
