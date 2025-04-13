@@ -62,9 +62,9 @@ web-summarize-extension/
 
 ## Extension pics
 
-![Photo 1](web-summary-pic.png)
-![Photo 2](web-summary-pic2.png)
-![Photo 3](web-summary-pic3.png)
+![Photo 1](/img/web-summary-pic.png)
+![Photo 2](/img/web-summary-pic2.png)
+![Photo 3](/img/web-summary-pic3.png)
 
 Thank you 
 
