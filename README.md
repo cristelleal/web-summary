@@ -62,9 +62,7 @@ web-summarize-extension/
 
 ## Extension pics
 
-![Photo 1](/img/web-summary-pic.png)
-![Photo 2](/img/web-summary-pic2.png)
-![Photo 3](/img/web-summary-pic3.png)
+There is somes pictures of the Web Summary chrome extension : 
 
 <div align="center">
   <img src="/img/web-summary-pic.png" width="30%" style="margin-right:10px">
@@ -72,5 +70,5 @@ web-summarize-extension/
   <img src="/img/web-summary-pic3.png" width="30%">
 </div>
 
-Thank you 
+Thank you.
 
