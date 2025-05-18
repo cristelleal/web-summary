@@ -1,5 +1,36 @@
 import { createClient } from "@supabase/supabase-js";
 
+const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("Variables d'environnement Supabase manquantes");
+}
+
+// Création d'un client Supabase singleton
+let instance: ReturnType<typeof createClient> | null = null;
+
+export const getSupabase = () => {
+  if (!instance) {
+    console.log("Création d'une nouvelle instance Supabase");
+    instance = createClient(supabaseUrl, supabaseAnonKey);
+  }
+  return instance;
+};
+
+export const supabase = getSupabase();
+
+export interface User {
+  id: string;
+  email: string;
+  user_metadata?: {
+    full_name?: string;
+    avatar_url?: string;
+  };
+}
+
 export interface Summary {
   id: string;
   user_id: string;
@@ -9,29 +40,33 @@ export interface Summary {
   created_at: string;
 }
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+export async function getSummaries(): Promise<Summary[]> {
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase environment variables");
-}
+    if (!session?.user) {
+      console.log("Aucun utilisateur connecté pour récupérer les résumés");
+      return [];
+    }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const { data, error } = await supabase
+      .from("summaries")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .order("created_at", { ascending: false });
 
-async function getUserId(): Promise<string> {
-  const storageKey = "web_summarizer_user_id";
+    if (error) {
+      console.error("Erreur lors de la récupération des résumés:", error);
+      throw error;
+    }
 
-  return new Promise((resolve) => {
-    chrome.storage.local.get([storageKey], (result) => {
-      if (result[storageKey]) {
-        resolve(result[storageKey]);
-      } else {
-        const newUserId = crypto.randomUUID();
-        chrome.storage.local.set({ [storageKey]: newUserId });
-        resolve(newUserId);
-      }
-    });
-  });
+    return (data as unknown as Summary[]) || [];
+  } catch (error) {
+    console.error("Erreur dans getSummaries:", error);
+    return [];
+  }
 }
 
 export async function saveSummary(
@@ -39,51 +74,62 @@ export async function saveSummary(
   title: string,
   summary: string
 ): Promise<Summary | null> {
-  const userId = await getUserId();
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  const { data, error } = await supabase
-    .from("summaries")
-    .insert([
-      {
-        user_id: userId,
-        url,
-        title,
-        summary,
-      },
-    ])
-    .select()
-    .single();
+    if (!session?.user) {
+      throw new Error("Utilisateur non connecté");
+    }
 
-  if (error) {
-    console.error("Error saving summary:", error);
+    const { data, error } = await supabase
+      .from("summaries")
+      .insert([
+        {
+          url,
+          title,
+          summary,
+          user_id: session.user.id,
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Erreur lors de l'enregistrement du résumé:", error);
+      throw error;
+    }
+
+    return data as unknown as Summary;
+  } catch (error) {
+    console.error("Erreur dans saveSummary:", error);
     throw error;
   }
-
-  return data;
-}
-
-export async function getSummaries(): Promise<Summary[]> {
-  const userId = await getUserId();
-
-  const { data, error } = await supabase
-    .from("summaries")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching summaries:", error);
-    throw error;
-  }
-
-  return data || [];
 }
 
 export async function deleteSummary(id: string): Promise<void> {
-  const { error } = await supabase.from("summaries").delete().eq("id", id);
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  if (error) {
-    console.error("Error deleting summary:", error);
+    if (!session?.user) {
+      throw new Error("Utilisateur non connecté");
+    }
+
+    const { error } = await supabase
+      .from("summaries")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", session.user.id);
+
+    if (error) {
+      console.error("Erreur lors de la suppression du résumé:", error);
+      throw error;
+    }
+  } catch (error) {
+    console.error("Erreur dans deleteSummary:", error);
     throw error;
   }
 }

@@ -3,12 +3,25 @@
   "name": "Web Summary",
   "author": "Cristelle A.",
   "version": "1.0.0",
-  "description": "Une extension Chrome pour résumer le contenu des pages web, en utilisant Cohere AI.",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "scripting"
+  "description": "Une extension Chrome pour résumer le contenu des pages web, en utilisant la puissance de Cohere AI.",
+  "permissions": ["activeTab", "storage", "scripting", "identity"],
+  "host_permissions": [
+    "https://*.supabase.co/*",
+    "https://*.googleapis.com/*",
+    "https://*.cohere.ai/*",
+    "https://*.cohere.com/*"
   ],
+  "oauth2": {
+    "client_id": "491056150864-jmoekn7bcjho3kohac0j74v3pcdjb51p.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  },
+  "background": {
+    "service_worker": "background.ts",
+    "type": "module"
+  },
   "action": {
     "default_popup": "index.html",
     "default_icon": {
@@ -23,5 +36,6 @@
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7zRobvA+AVlvNqkHSSVhh1sEWsHSqz4oR/XptkDe/Cz3+gW9ZGumZ20NCHjaac8j1iiesdigXoYHVXivOOt5NgE3Z0JWkPjzvHL8oLvNdRwqxoW0Q5F5QsNt+R6hCOYl2q/XUMkPXS8+MjNVWvFLkh8xSIMyIYExqVQF4z6vkasurZnXjWLpXDcOLkXL4RfVgF0OKxpZ5pGiSoYJY8936kC9yvTbWIZ7Z1bjArl/HJJ8Xfi/Cj4RBCUQ5Xz4Y9B3bQJwZ0+LxPmRUTKcEbWgwb+SgdMzqAOCcA7QCnLWIzIJEH/ELfu4RCRIHr0m4jgLvUvHBLqVY7WWdSlewIDAQAB"
 }
