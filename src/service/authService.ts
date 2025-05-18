@@ -1,31 +1,30 @@
 import { supabase } from "../lib/supabase";
 import type { GoogleUserInfo } from "../types";
 
-// Fonction pour se connecter avec Google
 export const signInWithGoogle = async (): Promise<{ oauthUrl: string; userInfo: GoogleUserInfo }> => {
   try {
     console.log("Début de la connexion avec Google...");
 
-    // 1. Obtenir le token Google via chrome.identity.getAuthToken
-    const token = await getGoogleAuthToken();
+    await new Promise<void>((resolve) => {
+      chrome.identity.clearAllCachedAuthTokens(() => {
+        console.log("Tokens OAuth nettoyés");
+        resolve();
+      });
+    });
 
-    if (!token) {
-      throw new Error("Impossible d'obtenir le token d'accès Google");
-    }
+    const accessToken = await getGoogleToken();
+    console.log("Token Google obtenu:", accessToken);
 
-    console.log("Token Google obtenu");
-
-    // 2. Récupérer les informations de l'utilisateur Google
-    const googleUser = await getGoogleUserInfo(token);
+    const googleUser = await getGoogleUserInfo(accessToken);
     console.log("Informations utilisateur récupérées:", googleUser.email);
 
-    // 3. Connecter l'utilisateur à Supabase avec le token Google
+    // Connecter l'utilisateur à Supabase avec le token Google
     console.log("Connexion à Supabase...");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         queryParams: {
-          access_token: token,
+          access_token: accessToken,
           expires_in: '3600',
         },
       },
@@ -49,36 +48,72 @@ export const signInWithGoogle = async (): Promise<{ oauthUrl: string; userInfo: 
   }
 };
 
-// Fonction pour obtenir un token Google via getAuthToken
-const getGoogleAuthToken = async (): Promise<string> => {
+// Fonction pour obtenir un token Google via chrome.identity.launchWebAuthFlow
+const getGoogleToken = (): Promise<string> => {
   return new Promise((resolve, reject) => {
     try {
-      console.log("Demande de token Google via getAuthToken...");
-
-      chrome.identity.getAuthToken({ interactive: true }, (token) => {
-        if (chrome.runtime.lastError) {
-          console.error("Chrome runtime error:", chrome.runtime.lastError);
-          reject(chrome.runtime.lastError);
-          return;
-        }
-
-        if (!token) {
-          console.error("Aucun token obtenu");
-          reject(new Error("Aucun token obtenu"));
-          return;
-        }
-
-        console.log("Token Google obtenu avec succès");
-        resolve(token);
+      console.log("Obtention du token Google...");
+      
+      const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      const REDIRECT_URL = chrome.identity.getRedirectURL();
+      
+      console.log("URL de redirection:", REDIRECT_URL);
+      
+      // Construire l'URL d'authentification Google
+      const authParams = new URLSearchParams({
+        client_id: CLIENT_ID,
+        redirect_uri: REDIRECT_URL,
+        response_type: 'token',
+        scope: 'email profile'
       });
+      
+      const authURL = `https://accounts.google.com/o/oauth2/auth?${authParams.toString()}`;
+      console.log("URL d'authentification:", authURL);
+      
+      // Lancer le flux d'authentification web
+      chrome.identity.launchWebAuthFlow(
+        {
+          url: authURL,
+          interactive: true
+        },
+        (redirectURL) => {
+          if (chrome.runtime.lastError) {
+            console.error("Erreur Chrome:", chrome.runtime.lastError);
+            reject(chrome.runtime.lastError);
+            return;
+          }
+          
+          if (!redirectURL) {
+            console.error("Pas d'URL de redirection reçue");
+            reject(new Error("Authentification annulée"));
+            return;
+          }
+          
+          console.log("URL de redirection reçue:", redirectURL);
+          
+          // Extraire le token de l'URL de redirection
+          const url = new URL(redirectURL);
+          const fragmentParams = new URLSearchParams(url.hash.substring(1));
+          const accessToken = fragmentParams.get('access_token');
+          
+          if (!accessToken) {
+            console.error("Aucun token d'accès trouvé dans l'URL de redirection");
+            reject(new Error("Aucun token d'accès trouvé"));
+            return;
+          }
+          
+          console.log("Token d'accès extrait avec succès");
+          resolve(accessToken);
+        }
+      );
     } catch (error) {
-      console.error("Erreur inattendue:", error);
+      console.error("Erreur lors de l'obtention du token Google:", error);
       reject(error);
     }
   });
 };
 
-// Fonction pour récupérer les informations utilisateur Google
+// Fonction pour récupérer les infos utilisateur Google
 const getGoogleUserInfo = async (
   accessToken: string
 ): Promise<GoogleUserInfo> => {
@@ -127,7 +162,6 @@ export const checkUser = async () => {
   }
 };
 
-// Se déconnecter
 export const signOut = async () => {
   try {
     console.log("Déconnexion...");

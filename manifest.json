@@ -4,20 +4,15 @@
   "author": "Cristelle A.",
   "version": "1.0.0",
   "description": "Une extension Chrome pour résumer le contenu des pages web, en utilisant la puissance de Cohere AI.",
-  "permissions": ["activeTab", "storage", "scripting", "identity"],
-  "host_permissions": [
-    "https://*.supabase.co/*",
-    "https://*.googleapis.com/*",
-    "https://*.cohere.ai/*",
-    "https://*.cohere.com/*"
-  ],
-  "oauth2": {
-    "client_id": "491056150864-jmoekn7bcjho3kohac0j74v3pcdjb51p.apps.googleusercontent.com",
-    "scopes": [
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile"
-    ]
-  },
+  "permissions": ["identity", "activeTab", "storage", "scripting"],
+"host_permissions": [
+  "https://*.supabase.co/*",
+  "https://fnnxmmvqmsxvoqtjreza.supabase.co/*",
+  "https://*.googleapis.com/*",
+  "https://*.cohere.ai/*",
+  "https://*.cohere.com/*",
+  "https://accounts.google.com/*"
+],
   "background": {
     "service_worker": "background.ts",
     "type": "module"
